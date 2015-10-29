@@ -1,0 +1,28 @@
+#!/bin/sh
+
+loadav=$(uptime | sed 's/.*load average: //')
+ram=$(free -m | grep - | awk '{print $3}')
+freeram="$ram Meg"
+conn=$(netstat -n | grep :80 | wc -l)
+uptime=$(uptime | sed 's/.*up //' | awk -F\, '{print $1}')
+loadchk=$(uptime | sed 's/.*load average: //' | awk '{print $1}' | cut -d, -f1 | cut -d. -f1)
+
+red='\033[1;31m'
+green='\033[0;32m'
+blue='\033[1;34m'
+purple='\033[1;35m'
+yellow='\033[0;33m'
+no='\033[0m'
+
+echo  "${blue}Server Health Viewer${no}"
+echo  "${purple}============================${no}"
+if [ $loadchk -ge 10 ];then
+echo "${red}Load Average : $loadav ${no}"
+else
+echo "${green}Load Average : $loadav${no}"
+fi
+echo "${green}Used Ram : $freeram ${no}"
+echo "${green}Active Connections : $conn${no}"
+echo "${green}Uptime : $uptime${no}"
+echo "${purple}============================${no}"
+echo "${blue}Hezarnevis.com${no}"
